@@ -4891,3 +4891,481 @@ Processing by TicketsController#update as HTML
 Completed 200 OK in 33ms (Views: 8.2ms | ActiveRecord: 2.0ms (4 queries, 0 cached) | GC: 0.0ms)
 
 
+Started GET "/tickets/board" for ::1 at 2025-09-04 22:21:21 -0400
+Processing by TicketsController#board as HTML
+Filter chain halted as :require_basic_auth rendered or redirected
+Completed 401 Unauthorized in 6ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/board" for ::1 at 2025-09-04 22:21:25 -0400
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 6.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 9.5ms | GC: 0.0ms)
+Completed 200 OK in 29ms (Views: 10.4ms | ActiveRecord: 1.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/assets/application-20a041a8.css" for ::1 at 2025-09-04 22:21:26 -0400
+Started GET "/tickets/new" for ::1 at 2025-09-04 22:21:30 -0400
+Processing by TicketsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/new.html.erb within layouts/application
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."username" ASC, "users"."id" ASC /*action='new',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_form.html.erb:77
+  Rendered tickets/_form.html.erb (Duration: 11.4ms | GC: 0.0ms)
+  Rendered tickets/new.html.erb within layouts/application (Duration: 11.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 12.7ms | GC: 0.0ms)
+Completed 200 OK in 23ms (Views: 12.4ms | ActiveRecord: 1.0ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/tickets" for ::1 at 2025-09-04 22:21:41 -0400
+Processing by TicketsController#create as HTML
+  Parameters: {"authenticity_token" => "[FILTERED]", "ticket" => {"account_name" => "install test", "city" => "nsb", "contact_person" => "", "contact_info" => "", "priority" => "low", "work_type" => "install", "lease" => "0", "under_warranty" => "0", "machine_model_or_type" => "", "issue_description" => "", "requesting_tech_name" => "", "assigned_to" => "", "stage" => "not_scheduled", "scheduled_date" => ""}, "commit" => "Create Ticket"}
+Filter chain halted as :require_basic_auth rendered or redirected
+Completed 401 Unauthorized in 4ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/tickets" for ::1 at 2025-09-04 22:21:41 -0400
+Processing by TicketsController#create as HTML
+  Parameters: {"authenticity_token" => "[FILTERED]", "ticket" => {"account_name" => "install test", "city" => "nsb", "contact_person" => "", "contact_info" => "", "priority" => "low", "work_type" => "install", "lease" => "0", "under_warranty" => "0", "machine_model_or_type" => "", "issue_description" => "", "requesting_tech_name" => "", "assigned_to" => "", "stage" => "not_scheduled", "scheduled_date" => ""}, "commit" => "Create Ticket"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+  [1m[36mTicket Create (0.6ms)[0m  [1m[32mINSERT INTO "tickets" ("account_name", "city", "contact_person", "contact_info", "priority", "work_type", "lease", "under_warranty", "machine_model_or_type", "issue_description", "requesting_tech_name", "assigned_to", "created_at", "updated_at", "stage", "completed_at", "position", "scheduled_date") VALUES ('install test', 'nsb', '', '', 'low', 'install', FALSE, FALSE, '', '', '', NULL, '2025-09-05 02:21:41.235139', '2025-09-05 02:21:41.235139', 'not_scheduled', NULL, NULL, NULL) RETURNING "id" /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+Redirected to http://localhost:3000/tickets/4
+Completed 303 See Other in 17ms (ActiveRecord: 1.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/4" for ::1 at 2025-09-04 22:21:41 -0400
+Processing by TicketsController#show as HTML
+  Parameters: {"id" => "4"}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 4 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/show.html.erb within layouts/application
+  [1m[36mTicketUpdate Load (0.1ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 4 ORDER BY "ticket_updates"."created_at" ASC /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_updates_list.html.erb:4
+  Rendered tickets/_updates_list.html.erb (Duration: 14.8ms | GC: 0.0ms)
+  Rendered tickets/_update_form.html.erb (Duration: 1.6ms | GC: 0.0ms)
+  [1m[36mTicketImage Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 4 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/show.html.erb:50
+  Rendered tickets/show.html.erb within layouts/application (Duration: 23.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 24.0ms | GC: 0.0ms)
+Completed 200 OK in 30ms (Views: 22.2ms | ActiveRecord: 2.1ms (3 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/board" for ::1 at 2025-09-04 22:21:43 -0400
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.7ms | GC: 0.0ms)
+Completed 200 OK in 11ms (Views: 3.3ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/4?modal=1" for ::1 at 2025-09-04 22:21:46 -0400
+Processing by TicketsController#show as HTML
+  Parameters: {"modal" => "1", "id" => "4"}
+  [1m[36mTicket Load (0.5ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 4 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering tickets/show.html.erb
+  [1m[36mTicketUpdate Load (0.3ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 4 ORDER BY "ticket_updates"."created_at" ASC /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_updates_list.html.erb:4
+  Rendered tickets/_updates_list.html.erb (Duration: 4.0ms | GC: 0.0ms)
+  Rendered tickets/_update_form.html.erb (Duration: 1.7ms | GC: 0.0ms)
+  [1m[36mTicketImage Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 4 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/show.html.erb:50
+  Rendered tickets/show.html.erb (Duration: 10.9ms | GC: 0.0ms)
+Completed 200 OK in 17ms (Views: 11.2ms | ActiveRecord: 0.9ms (3 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/4/edit?modal=1" for ::1 at 2025-09-04 22:21:51 -0400
+Processing by TicketsController#edit as HTML
+  Parameters: {"modal" => "1", "id" => "4"}
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 4 LIMIT 1 /*action='edit',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering tickets/edit.html.erb
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."username" ASC, "users"."id" ASC /*action='edit',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_form.html.erb:77
+  Rendered tickets/_form.html.erb (Duration: 5.8ms | GC: 0.0ms)
+  Rendered tickets/edit.html.erb (Duration: 5.9ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 6.3ms | ActiveRecord: 0.5ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets" for ::1 at 2025-09-04 22:21:55 -0400
+Processing by TicketsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/index.html.erb within layouts/application
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY "tickets"."created_at" DESC /*action='index',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/index.html.erb:42
+  Rendered tickets/index.html.erb within layouts/application (Duration: 17.9ms | GC: 8.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 18.6ms | GC: 8.6ms)
+Completed 200 OK in 34ms (Views: 18.6ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 8.6ms)
+
+
+Started DELETE "/tickets/4" for ::1 at 2025-09-04 22:22:48 -0400
+Processing by TicketsController#destroy as HTML
+  Parameters: {"authenticity_token" => "[FILTERED]", "id" => "4"}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 4 LIMIT 1 /*action='destroy',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='destroy',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:76:in 'TicketsController#destroy'
+  [1m[36mTicketImage Load (0.6ms)[0m  [1m[34mSELECT "ticket_images".* FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 4 /*action='destroy',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:76:in 'TicketsController#destroy'
+  [1m[36mTicketUpdate Load (0.1ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 4 ORDER BY "ticket_updates"."created_at" ASC /*action='destroy',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:76:in 'TicketsController#destroy'
+  [1m[36mTicket Destroy (0.2ms)[0m  [1m[31mDELETE FROM "tickets" WHERE "tickets"."id" = 4 /*action='destroy',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:76:in 'TicketsController#destroy'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*action='destroy',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:76:in 'TicketsController#destroy'
+Redirected to http://localhost:3000/tickets
+Completed 303 See Other in 13ms (ActiveRecord: 1.6ms (4 queries, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/tickets" for ::1 at 2025-09-04 22:22:48 -0400
+Processing by TicketsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/index.html.erb within layouts/application
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY "tickets"."created_at" DESC /*action='index',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/index.html.erb:42
+  Rendered tickets/index.html.erb within layouts/application (Duration: 1.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.2ms | GC: 0.0ms)
+Completed 200 OK in 6ms (Views: 2.2ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/board" for ::1 at 2025-09-04 22:22:50 -0400
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.2ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 1.3ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/tickets/2/stage" for ::1 at 2025-09-04 22:22:54 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "2", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Load (0.6ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 11ms (Views: 1.0ms | ActiveRecord: 1.1ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started PATCH "/tickets/3/stage" for ::1 at 2025-09-04 22:22:58 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 2, "id" => "3", "ticket" => {"stage" => "not_scheduled", "position" => 2}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 3 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 7ms (Views: 0.1ms | ActiveRecord: 0.6ms (2 queries, 0 cached) | GC: 0.3ms)
+
+
+Started PATCH "/tickets/3/stage" for ::1 at 2025-09-04 22:23:03 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "3", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 3 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Update (0.5ms)[0m  [1m[33mUPDATE "tickets" SET "updated_at" = '2025-09-05 02:23:03.099476', "position" = 1 WHERE "tickets"."id" = 3 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Update (0.1ms)[0m  [1m[33mUPDATE "tickets" SET "position" = 2 WHERE "tickets"."id" = 3 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:125:in 'block in TicketsController#normalize_stage_positions!'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 9ms (Views: 0.0ms | ActiveRecord: 1.7ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/tickets/2/stage" for ::1 at 2025-09-04 22:23:05 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 2, "id" => "2", "ticket" => {"stage" => "not_scheduled", "position" => 2}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Update (0.4ms)[0m  [1m[33mUPDATE "tickets" SET "updated_at" = '2025-09-05 02:23:05.764719', "position" = 2 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Update (0.0ms)[0m  [1m[33mUPDATE "tickets" SET "position" = 1 WHERE "tickets"."id" = 3 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:125:in 'block in TicketsController#normalize_stage_positions!'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 9ms (Views: 0.0ms | ActiveRecord: 1.4ms (4 queries, 0 cached) | GC: 1.0ms)
+
+
+Started PATCH "/tickets/2/stage" for ::1 at 2025-09-04 22:23:12 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "2", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.5ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Update (0.8ms)[0m  [1m[33mUPDATE "tickets" SET "updated_at" = '2025-09-05 02:23:12.790778', "position" = 1 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Update (0.1ms)[0m  [1m[33mUPDATE "tickets" SET "position" = 2 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:125:in 'block in TicketsController#normalize_stage_positions!'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 20ms (Views: 0.0ms | ActiveRecord: 2.0ms (4 queries, 0 cached) | GC: 0.3ms)
+
+
+Started PATCH "/tickets/3/stage" for ::1 at 2025-09-04 22:23:14 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "3", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 3 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Load (0.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 6ms (Views: 0.0ms | ActiveRecord: 0.6ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/tickets/2/stage" for ::1 at 2025-09-04 22:23:16 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "2", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Update (0.6ms)[0m  [1m[33mUPDATE "tickets" SET "updated_at" = '2025-09-05 02:23:16.410188', "position" = 1 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Update (0.1ms)[0m  [1m[33mUPDATE "tickets" SET "position" = 2 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:125:in 'block in TicketsController#normalize_stage_positions!'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 10ms (Views: 0.0ms | ActiveRecord: 1.5ms (4 queries, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/tickets/3/stage" for ::1 at 2025-09-04 22:23:18 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "3", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 3 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Load (0.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 11ms (Views: 0.0ms | ActiveRecord: 0.6ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started PATCH "/tickets/2/stage" for ::1 at 2025-09-04 22:23:20 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "2", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Update (0.4ms)[0m  [1m[33mUPDATE "tickets" SET "updated_at" = '2025-09-05 02:23:20.095211', "position" = 1 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Update (0.1ms)[0m  [1m[33mUPDATE "tickets" SET "position" = 2 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:125:in 'block in TicketsController#normalize_stage_positions!'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 14ms (Views: 0.2ms | ActiveRecord: 1.5ms (4 queries, 0 cached) | GC: 0.2ms)
+
+
+Started PATCH "/tickets/3/stage" for ::1 at 2025-09-04 22:23:22 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "3", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 3 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Load (0.9ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 7ms (Views: 0.0ms | ActiveRecord: 1.5ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started PATCH "/tickets/2/stage" for ::1 at 2025-09-04 22:23:24 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "2", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Update (0.7ms)[0m  [1m[33mUPDATE "tickets" SET "updated_at" = '2025-09-05 02:23:24.066746', "position" = 1 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Update (0.2ms)[0m  [1m[33mUPDATE "tickets" SET "position" = 2 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:125:in 'block in TicketsController#normalize_stage_positions!'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 23ms (Views: 0.0ms | ActiveRecord: 1.8ms (4 queries, 0 cached) | GC: 0.1ms)
+
+
+Started PATCH "/tickets/3/stage" for ::1 at 2025-09-04 22:23:24 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "3", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 3 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Load (0.5ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 12ms (Views: 1.5ms | ActiveRecord: 0.8ms (2 queries, 0 cached) | GC: 0.1ms)
+
+
+Started PATCH "/tickets/2/stage" for ::1 at 2025-09-04 22:23:25 -0400
+Processing by TicketsController#update_stage as JSON
+  Parameters: {"stage" => "not_scheduled", "position" => 1, "id" => "2", "ticket" => {"stage" => "not_scheduled", "position" => 1}}
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Update (1.7ms)[0m  [1m[33mUPDATE "tickets" SET "updated_at" = '2025-09-05 02:23:25.360651', "position" = 1 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:94:in 'block in TicketsController#update_stage'
+  [1m[36mTicket Load (0.1ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."stage" = 'not_scheduled' ORDER BY position IS NULL, position ASC, "tickets"."updated_at" ASC, "tickets"."created_at" ASC /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:123:in 'Enumerable#each_with_index'
+  [1m[36mTicket Update (0.1ms)[0m  [1m[33mUPDATE "tickets" SET "position" = 2 WHERE "tickets"."id" = 2 /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:125:in 'block in TicketsController#normalize_stage_positions!'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT /*action='update_stage',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:93:in 'TicketsController#update_stage'
+Completed 200 OK in 21ms (Views: 0.4ms | ActiveRecord: 2.7ms (4 queries, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/tickets/new" for ::1 at 2025-09-04 22:23:38 -0400
+Processing by TicketsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/new.html.erb within layouts/application
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."username" ASC, "users"."id" ASC /*action='new',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_form.html.erb:77
+  Rendered tickets/_form.html.erb (Duration: 8.7ms | GC: 0.0ms)
+  Rendered tickets/new.html.erb within layouts/application (Duration: 9.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 9.9ms | GC: 0.0ms)
+Completed 200 OK in 32ms (Views: 15.5ms | ActiveRecord: 2.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/tickets" for ::1 at 2025-09-04 22:23:52 -0400
+Processing by TicketsController#create as HTML
+  Parameters: {"authenticity_token" => "[FILTERED]", "ticket" => {"account_name" => "test install", "city" => "test", "contact_person" => "", "contact_info" => "", "priority" => "low", "work_type" => "install", "lease" => "0", "under_warranty" => "0", "machine_model_or_type" => "", "issue_description" => "", "requesting_tech_name" => "", "assigned_to" => "", "stage" => "not_scheduled", "scheduled_date" => ""}, "commit" => "Create Ticket"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+  [1m[36mTicket Create (0.7ms)[0m  [1m[32mINSERT INTO "tickets" ("account_name", "city", "contact_person", "contact_info", "priority", "work_type", "lease", "under_warranty", "machine_model_or_type", "issue_description", "requesting_tech_name", "assigned_to", "created_at", "updated_at", "stage", "completed_at", "position", "scheduled_date") VALUES ('test install', 'test', '', '', 'low', 'install', FALSE, FALSE, '', '', '', NULL, '2025-09-05 02:23:52.715196', '2025-09-05 02:23:52.715196', 'install_removal', NULL, NULL, NULL) RETURNING "id" /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+Redirected to http://localhost:3000/tickets/5
+Completed 303 See Other in 14ms (ActiveRecord: 1.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/5" for ::1 at 2025-09-04 22:23:52 -0400
+Processing by TicketsController#show as HTML
+  Parameters: {"id" => "5"}
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 5 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/show.html.erb within layouts/application
+  [1m[36mTicketUpdate Load (0.1ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 5 ORDER BY "ticket_updates"."created_at" ASC /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_updates_list.html.erb:4
+  Rendered tickets/_updates_list.html.erb (Duration: 8.6ms | GC: 0.0ms)
+  Rendered tickets/_update_form.html.erb (Duration: 1.6ms | GC: 0.0ms)
+  [1m[36mTicketImage Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 5 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/show.html.erb:50
+  Rendered tickets/show.html.erb within layouts/application (Duration: 18.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 18.4ms | GC: 0.0ms)
+Completed 200 OK in 33ms (Views: 17.2ms | ActiveRecord: 2.1ms (3 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/board" for ::1 at 2025-09-04 22:23:54 -0400
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.6ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 3.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.3ms | GC: 0.0ms)
+Completed 200 OK in 28ms (Views: 5.2ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/new" for ::1 at 2025-09-04 22:23:56 -0400
+Processing by TicketsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/new.html.erb within layouts/application
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."username" ASC, "users"."id" ASC /*action='new',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_form.html.erb:77
+  Rendered tickets/_form.html.erb (Duration: 6.4ms | GC: 0.3ms)
+  Rendered tickets/new.html.erb within layouts/application (Duration: 6.5ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.3ms | GC: 0.3ms)
+Completed 200 OK in 17ms (Views: 7.7ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started POST "/tickets" for ::1 at 2025-09-04 22:24:05 -0400
+Processing by TicketsController#create as HTML
+  Parameters: {"authenticity_token" => "[FILTERED]", "ticket" => {"account_name" => "test removal", "city" => "test", "contact_person" => "", "contact_info" => "", "priority" => "low", "work_type" => "removal", "lease" => "0", "under_warranty" => "0", "machine_model_or_type" => "", "issue_description" => "", "requesting_tech_name" => "", "assigned_to" => "", "stage" => "not_scheduled", "scheduled_date" => ""}, "commit" => "Create Ticket"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+  [1m[36mTicket Create (1.2ms)[0m  [1m[32mINSERT INTO "tickets" ("account_name", "city", "contact_person", "contact_info", "priority", "work_type", "lease", "under_warranty", "machine_model_or_type", "issue_description", "requesting_tech_name", "assigned_to", "created_at", "updated_at", "stage", "completed_at", "position", "scheduled_date") VALUES ('test removal', 'test', '', '', 'low', 'removal', FALSE, FALSE, '', '', '', NULL, '2025-09-05 02:24:05.180729', '2025-09-05 02:24:05.180729', 'install_removal', NULL, NULL, NULL) RETURNING "id" /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT /*action='create',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:44:in 'TicketsController#create'
+Redirected to http://localhost:3000/tickets/6
+Completed 303 See Other in 18ms (ActiveRecord: 1.8ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/tickets/6" for ::1 at 2025-09-04 22:24:05 -0400
+Processing by TicketsController#show as HTML
+  Parameters: {"id" => "6"}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 6 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/show.html.erb within layouts/application
+  [1m[36mTicketUpdate Load (0.1ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 6 ORDER BY "ticket_updates"."created_at" ASC /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_updates_list.html.erb:4
+  Rendered tickets/_updates_list.html.erb (Duration: 2.1ms | GC: 0.0ms)
+  Rendered tickets/_update_form.html.erb (Duration: 1.0ms | GC: 0.0ms)
+  [1m[36mTicketImage Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 6 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/show.html.erb:50
+  Rendered tickets/show.html.erb within layouts/application (Duration: 5.3ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 6.5ms | GC: 0.4ms)
+Completed 200 OK in 14ms (Views: 7.9ms | ActiveRecord: 0.4ms (3 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/tickets/board" for ::1 at 2025-09-04 22:24:06 -0400
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.3ms | GC: 0.0ms)
+Completed 200 OK in 15ms (Views: 7.5ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
