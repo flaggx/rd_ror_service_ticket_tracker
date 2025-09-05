@@ -2,8 +2,10 @@ class TicketsController < ApplicationController
   before_action :set_ticket, only: [:show, :edit, :update, :destroy, :update_stage]
   before_action :set_users, only: [:new, :edit, :create, :update]
 
+  # GET /tickets
   def index
     @tickets = Ticket.order(created_at: :desc)
+
     if params[:priority].present?
       @tickets = @tickets.where(priority: params[:priority])
     end
@@ -19,23 +21,24 @@ class TicketsController < ApplicationController
     end
   end
 
+  # GET /tickets/board
   def board
     # Order by position (NULLS LAST), then created_at as a fallback
     ordered = Ticket.order(Arel.sql("position IS NULL, position ASC"), :created_at)
     @tickets_by_stage = ordered.group_by { |t| t.stage.presence || "not_scheduled" }
   end
 
+  # GET /tickets/1
   def show
-    # If opened as a modal fetch (params[:modal]), we render without layout
-    if params[:modal].present?
-      render layout: false
-    end
+    render layout: false if params[:modal].present?
   end
 
+  # GET /tickets/new
   def new
     @ticket = Ticket.new
   end
 
+  # POST /tickets
   def create
     @ticket = Ticket.new(ticket_params)
     if @ticket.save
@@ -45,23 +48,36 @@ class TicketsController < ApplicationController
     end
   end
 
+  # GET /tickets/1/edit
   def edit
+    render layout: false if params[:modal].present?
   end
 
+  # PATCH/PUT /tickets/1
   def update
     if @ticket.update(ticket_params)
-      redirect_to @ticket, notice: "Ticket was successfully updated.", status: :see_other
+      if params[:modal].present?
+        # After modal edit, show the updated ticket in the modal
+        render :show, layout: false, status: :ok
+      else
+        redirect_to @ticket, notice: "Ticket was successfully updated.", status: :see_other
+      end
     else
-      render :edit, status: :unprocessable_entity
+      if params[:modal].present?
+        render :edit, layout: false, status: :unprocessable_entity
+      else
+        render :edit, status: :unprocessable_entity
+      end
     end
   end
 
+  # DELETE /tickets/1
   def destroy
     @ticket.destroy
     redirect_to tickets_path, notice: "Ticket was successfully destroyed.", status: :see_other
   end
 
-  # Drag-and-drop update: stage (column) + position (index within that column)
+  # PATCH /tickets/:id/stage
   def update_stage
     old_stage = @ticket.stage
     new_stage = params.require(:stage)
@@ -76,8 +92,6 @@ class TicketsController < ApplicationController
 
     Ticket.transaction do
       @ticket.update!(stage: new_stage, position: position)
-
-      # Normalize positions in the affected stage(s) to be 1..N with stable order
       normalize_stage_positions!(new_stage)
       normalize_stage_positions!(old_stage) if old_stage != new_stage
     end

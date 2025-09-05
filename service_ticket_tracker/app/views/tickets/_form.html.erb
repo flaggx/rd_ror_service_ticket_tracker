@@ -1,4 +1,9 @@
 <%= form_with(model: ticket, class: "space-y-6") do |form| %>
+  <%# Keep modal flow on submit if modal=1 %>
+  <% if params[:modal].present? %>
+    <%= hidden_field_tag :modal, 1 %>
+  <% end %>
+
   <% if ticket.errors.any? %>
     <div id="error_explanation" class="rounded-md border border-red-800 bg-red-900/60 p-4 text-red-200">
       <h2 class="mb-2 text-sm font-semibold"><%= pluralize(ticket.errors.count, "error") %> prevented saving:</h2>
@@ -66,17 +71,12 @@
       <%= form.text_field :requesting_tech_name, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
 
-    <!-- Assigned user select -->
     <div>
       <%= form.label :assigned_to, "Assigned user", class: "mb-1 block text-sm font-medium text-gray-300" %>
       <%= form.select :assigned_to,
                       options_from_collection_for_select(@users || User.order(:username, :id), :id, :username, ticket.assigned_to),
                       { include_blank: "Unassigned" },
                       class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
-      <p class="mt-1 text-xs text-gray-400">
-        Can’t find a user?
-        <%= link_to "Add a new user", new_user_path, class: "underline text-indigo-300 hover:text-indigo-200" %>
-      </p>
     </div>
 
     <div>

@@ -4,7 +4,10 @@
     <% if @ticket.stage == "repair_complete" %>
       <span class="inline-flex items-center rounded-full bg-green-900/50 px-2 py-1 text-xs font-medium text-green-300">Completed</span>
     <% end %>
-    <%= link_to "Edit", edit_ticket_path(@ticket), class: "inline-flex items-center rounded-md border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-100 hover:bg-gray-800" %>
+    <%= link_to "Edit",
+                edit_ticket_path(@ticket, modal: 1),
+                data: { modal: "1" },
+                class: "inline-flex items-center rounded-md border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-100 hover:bg-gray-800" %>
     <%= link_to "Back", tickets_path, class: "inline-flex items-center rounded-md bg-gray-700 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-600" %>
   </div>
 </div>

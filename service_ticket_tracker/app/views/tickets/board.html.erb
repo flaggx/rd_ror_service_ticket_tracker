@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<!-- Board with comfortable height and sticky headers -->
+<!-- Board with sticky headers and comfortable height -->
 <div id="board-scroll" class="overflow-x-auto select-none pb-10">
   <div class="flex gap-4 min-w-max">
     <% @tickets_by_stage ||= {} %>
@@ -119,6 +119,40 @@
         modal.classList.remove("flex");
         document.getElementById("ticket-modal-body").innerHTML = "";
     }
+
+    // Intercept clicks inside modal for links marked for modal flow
+    document.getElementById("ticket-modal-body").addEventListener("click", function(e) {
+        const a = e.target.closest("a");
+        if (!a) return;
+        const isModalLink = a.dataset.modal === "1" || (a.getAttribute("href") || "").includes("modal=1");
+        if (!isModalLink) return;
+
+        e.preventDefault();
+        fetch(a.href, { headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "text/html" }})
+            .then(r => r.text())
+            .then(html => openModal(html))
+            .catch(() => showBoardError("Failed to load"));
+    });
+
+    // Intercept form submits from modal edit (keeps flow in modal)
+    document.getElementById("ticket-modal-body").addEventListener("submit", function(e) {
+        const form = e.target.closest("form");
+        if (!form) return;
+        const hasModalParam = form.querySelector("input[name='modal'][value='1']");
+        if (!hasModalParam) return;
+
+        e.preventDefault();
+        fetch(form.action, {
+            method: (form.method || "POST").toUpperCase(),
+            headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "text/html" },
+            body: new FormData(form)
+        })
+            .then(async r => {
+                const html = await r.text();
+                openModal(html); // show updated ticket or re-render edit with errors
+            })
+            .catch(() => showBoardError("Failed to submit form"));
+    });
 
     // Persist horizontal scroll
     (function restoreBoardScroll() {
@@ -309,32 +343,30 @@
             const viewportH = window.innerHeight;
             const viewportW = window.innerWidth;
 
-            // Recompute edges continuously using latest pointer
-            const edgeV = 120; // vertical edge threshold (more generous for top)
-            const edgeH = 80;  // horizontal edge threshold
-            const fastBandV = 40; // extra speed very close to edges
+            // Edges and speeds
+            const edgeV = 120; // generous vertical threshold
+            const edgeH = 80;  // horizontal threshold
+            const fastBandV = 40; // faster near top/bottom
             const vBase = 12;
             const hBase = 16;
 
             const ulRect = lastUL.getBoundingClientRect();
 
-            // Window vertical scrolling
+            // Window vertical
             let scrollDown = lastPointerY > (viewportH - edgeV);
             let scrollUp   = lastPointerY < edgeV;
 
-            // Column internal scrolling (vertical)
+            // Column internal vertical
             let colDown = lastPointerY > (ulRect.bottom - 80);
-            let colUp   = lastPointerY < (ulRect.top + 100); // larger top band
+            let colUp   = lastPointerY < (ulRect.top + 100);
 
-            // Board horizontal scrolling
+            // Board horizontal
             let scrollRight = lastPointerX > (viewportW - edgeH);
             let scrollLeft  = lastPointerX < edgeH;
 
-            // Speed boost very close to the top/bottom
             let vSpeed = vBase;
             if (lastPointerY < fastBandV || lastPointerY > (viewportH - fastBandV)) vSpeed = vBase * 1.8;
 
-            // Apply scrolling
             if (scrollDown) window.scrollBy(0, vSpeed);
             if (scrollUp)   window.scrollBy(0, -vSpeed);
 
