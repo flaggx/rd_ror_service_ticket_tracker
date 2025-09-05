@@ -1,0 +1,31 @@
+<%# Renders a list of updates for the given ticket. Safe even if association isn't present. %>
+<% updates = ticket.respond_to?(:ticket_updates) ? ticket.ticket_updates : [] %>
+
+<% if updates.present? %>
+  <div class="space-y-3">
+    <% updates.each do |u| %>
+      <div class="rounded-md border border-gray-700 bg-gray-800 p-3">
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span><%= u.try(:user_name).presence || "System" %></span>
+          <span><%= l(u.try(:created_at) || Time.current, format: :short) %></span>
+        </div>
+
+        <div class="mt-1 whitespace-pre-wrap text-sm text-gray-100"><%= u.try(:content) %></div>
+
+        <% if u.try(:id) %>
+          <div class="mt-2">
+            <%= button_to "Delete",
+                          ticket_ticket_update_path(ticket, u),
+                          method: :delete,
+                          form: { data: { turbo_confirm: "Delete this update?" } },
+                          class: "text-xs text-red-400 hover:text-red-300 bg-transparent p-0 border-0 underline cursor-pointer" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="rounded-md border border-gray-700 bg-gray-800 p-3 text-sm text-gray-300">
+    No updates yet.
+  </div>
+<% end %>

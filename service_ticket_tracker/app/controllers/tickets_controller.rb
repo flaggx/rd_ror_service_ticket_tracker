@@ -1,22 +1,88 @@
 class TicketsController < ApplicationController
-  # ... existing code ...
-  # Load the ticket only for member routes (those that have :id)
-  before_action :set_ticket, if: -> { params[:id].present? }
-  # ... existing code ...
+  # Load @ticket for member actions that need it
+  before_action :set_ticket, only: [:show, :edit, :update, :destroy, :update_stage]
 
-  # Ensure index assigns @tickets for the list page
+  # GET /tickets
   def index
     @tickets = Ticket.order(created_at: :desc)
+
+    # Optional filters
+    if params[:priority].present?
+      @tickets = @tickets.where(priority: params[:priority])
+    end
+
+    if params[:stage].present?
+      @tickets = @tickets.where(stage: params[:stage])
+    end
+
+    unless params[:under_warranty].to_s.blank?
+      bool = ActiveModel::Type::Boolean.new.cast(params[:under_warranty])
+      @tickets = @tickets.where(under_warranty: bool)
+    end
+
+    if params[:assigned_to].present?
+      @tickets = @tickets.where(assigned_to: params[:assigned_to])
+    end
   end
 
-  # Kanban board view
+  # GET /tickets/board
   def board
-    @tickets_by_stage = Ticket.all.group_by(&:stage)
+    # Ensure tickets with nil stage still appear
+    @tickets_by_stage = Ticket.all.group_by { |t| t.stage.presence || "not_scheduled" }
   end
 
-  # Update stage via drag-and-drop
+  # GET /tickets/1
+  def show
+  end
+
+  # GET /tickets/new
+  def new
+    @ticket = Ticket.new
+  end
+
+  # POST /tickets
+  def create
+    @ticket = Ticket.new(ticket_params)
+
+    respond_to do |format|
+      if @ticket.save
+        format.html { redirect_to @ticket, notice: "Ticket was successfully created.", status: :see_other }
+        format.json { render :show, status: :created, location: @ticket }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @ticket.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # GET /tickets/1/edit
+  def edit
+  end
+
+  # PATCH/PUT /tickets/1
+  def update
+    respond_to do |format|
+      if @ticket.update(ticket_params)
+        format.html { redirect_to @ticket, notice: "Ticket was successfully updated.", status: :see_other }
+        format.json { render :show, status: :ok, location: @ticket }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @ticket.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /tickets/1
+  def destroy
+    @ticket.destroy
+    respond_to do |format|
+      format.html { redirect_to tickets_path, notice: "Ticket was successfully destroyed.", status: :see_other }
+      format.json { head :no_content }
+    end
+  end
+
+  # PATCH /tickets/:id/stage
   def update_stage
-    # @ticket is set by before_action
     new_stage = params.require(:stage)
 
     unless Ticket.stages.key?(new_stage)
@@ -38,8 +104,6 @@ class TicketsController < ApplicationController
       end
     end
   end
-
-  # ... existing code ...
 
   private
 

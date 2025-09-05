@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_04_230432) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_05_005216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -26,6 +26,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_04_230432) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ticket_id"], name: "index_ticket_images_on_ticket_id"
+  end
+
+  create_table "ticket_updates", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "user_name"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_id"], name: "index_ticket_updates_on_ticket_id"
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -59,5 +68,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_04_230432) do
   end
 
   add_foreign_key "ticket_images", "tickets"
+  add_foreign_key "ticket_updates", "tickets"
   add_foreign_key "tickets", "users", column: "assigned_to"
 end

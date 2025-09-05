@@ -1,0 +1,4 @@
+class TicketUpdate < ApplicationRecord
+  belongs_to :ticket
+  validates :content, presence: true
+end

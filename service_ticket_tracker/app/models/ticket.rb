@@ -2,6 +2,8 @@ class Ticket < ApplicationRecord
   # ... existing code ...
   belongs_to :assigned, class_name: "User", foreign_key: :assigned_to, optional: true
   has_many :images, class_name: "TicketImage", dependent: :destroy, inverse_of: :ticket
+  has_many :ticket_updates, -> { order(created_at: :asc) }, dependent: :destroy
+
 
   enum :priority, { low: "low", medium: "medium", high: "high" }, prefix: true
   enum :work_type, { install: "install", removal: "removal" }, prefix: true, allow_nil: true

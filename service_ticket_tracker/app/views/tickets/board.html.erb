@@ -18,7 +18,7 @@
 
 <div id="board-error" class="mb-3 hidden rounded-md border border-red-800 bg-red-900/60 px-4 py-2 text-sm text-red-200"></div>
 
-<div class="overflow-x-auto">
+<div class="overflow-x-auto select-none">
   <div class="flex gap-4 pb-2 min-w-max">
     <% @tickets_by_stage ||= {} %>
     <% stages.each do |value, label| %>
@@ -27,7 +27,7 @@
           <h2 class="text-sm font-semibold text-gray-200"><%= label %></h2>
         </header>
         <ul
-          class="min-h-24 space-y-2 p-3 transition ring-0"
+          class="min-h-32 space-y-2 p-3 transition ring-0"
           data-stage="<%= value %>"
           ondragover="event.preventDefault()"
           ondragenter="columnEnter(event)"
@@ -37,9 +37,10 @@
           <% (@tickets_by_stage[value] || []).each do |ticket| %>
             <li
               id="ticket-<%= ticket.id %>"
-              class="cursor-move rounded-md border border-gray-600 bg-gray-700 p-3 shadow-sm"
+              class="group cursor-grab rounded-md border border-gray-600 bg-gray-700 p-3 shadow-sm transition"
               draggable="true"
               ondragstart="dragStart(event)"
+              ondragend="dragEnd(event)"
               data-ticket-id="<%= ticket.id %>"
             >
               <div class="flex items-center justify-between">
@@ -51,6 +52,7 @@
               </div>
               <div class="mt-1 text-xs">
                 <% color = { "high"=>"bg-red-900/50 text-red-300", "medium"=>"bg-yellow-900/50 text-yellow-300", "low"=>"bg-gray-600 text-gray-200" }[ticket.priority] || "bg-gray-600 text-gray-200" %>
+                <span class="mr-2 text-gray-300">Priority:</span>
                 <span class="inline-flex items-center rounded-full px-2 py-0.5 font-medium <%= color %>"><%= ticket.priority.humanize %></span>
                 <% if ticket.stage == "repair_complete" %>
                   <span class="ml-2 inline-flex items-center rounded-full bg-green-900/50 px-2 py-0.5 text-xs font-medium text-green-300">Completed</span>
@@ -62,6 +64,11 @@
               </div>
             </li>
           <% end %>
+
+          <!-- Drop hint: now shown whenever dragging over the column, even if it has cards -->
+          <li class="hidden drop-hint rounded border border-dashed border-indigo-700/60 bg-indigo-900/20 p-2 text-center text-xs text-indigo-300">
+            Drop here
+          </li>
         </ul>
       </section>
     <% end %>
@@ -80,28 +87,62 @@
         setTimeout(() => box.classList.add("hidden"), 4000);
     }
 
+    function setDraggingStyles(el, dragging) {
+        if (!el) return;
+        if (dragging) {
+            el.classList.add("opacity-60", "ring-2", "ring-indigo-500", "cursor-grabbing", "scale-[0.99]");
+            el.classList.remove("cursor-grab");
+        } else {
+            el.classList.remove("opacity-60", "ring-2", "ring-indigo-500", "cursor-grabbing", "scale-[0.99]");
+            el.classList.add("cursor-grab");
+        }
+    }
+
+    function toggleDropStyles(ul, on) {
+        if (!ul) return;
+        const hint = ul.querySelector(".drop-hint");
+        if (on) {
+            ul.classList.add("ring", "ring-indigo-700/60", "bg-indigo-900/10");
+            if (hint) hint.classList.remove("hidden"); // always show hint while dragging over
+        } else {
+            ul.classList.remove("ring", "ring-indigo-700/60", "bg-indigo-900/10");
+            if (hint) hint.classList.add("hidden");
+        }
+    }
+
     function dragStart(e) {
-        draggedId = e.currentTarget.dataset.ticketId;
-        previousParent = e.currentTarget.parentElement;
+        const el = e.currentTarget;
+        draggedId = el.dataset.ticketId;
+        previousParent = el.parentElement;
         e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", draggedId);
+        setDraggingStyles(el, true);
+    }
+
+    function dragEnd(e) {
+        setDraggingStyles(e.currentTarget, false);
+        document.querySelectorAll("ul[data-stage]").forEach(ul => toggleDropStyles(ul, false));
+        draggedId = null;
+        previousParent = null;
     }
 
     function columnEnter(e) {
-        e.currentTarget.classList.add("ring", "ring-indigo-700/60");
+        toggleDropStyles(e.currentTarget, true);
     }
 
     function columnLeave(e) {
-        e.currentTarget.classList.remove("ring", "ring-indigo-700/60");
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            toggleDropStyles(e.currentTarget, false);
+        }
     }
 
     async function dropOnColumn(e) {
         e.preventDefault();
         const ul = e.currentTarget;
-        ul.classList.remove("ring", "ring-indigo-700/60");
+        toggleDropStyles(ul, false);
         const stage = ul.dataset.stage;
         if (!draggedId) return;
 
-        // Optimistic move
         const el = document.getElementById(`ticket-${draggedId}`);
         if (el && ul) ul.appendChild(el);
 
@@ -112,9 +153,9 @@
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
-        },
-            body: JSON.stringify({ stage })
-        });
+                },
+                body: JSON.stringify({ stage })
+            });
             if (!resp.ok) {
                 const data = await resp.json().catch(() => ({}));
                 if (previousParent && el) previousParent.appendChild(el);
@@ -125,6 +166,7 @@
             if (previousParent && el) previousParent.appendChild(el);
             showBoardError("Network error updating stage");
         } finally {
+            setDraggingStyles(el, false);
             draggedId = null;
             previousParent = null;
         }

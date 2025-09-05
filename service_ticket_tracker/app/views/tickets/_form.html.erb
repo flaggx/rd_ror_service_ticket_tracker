@@ -13,56 +13,72 @@
   <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
     <div>
       <%= form.label :account_name, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.text_field :account_name, required: true, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.text_field :account_name, required: true, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div>
       <%= form.label :city, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.text_field :city, required: true, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.text_field :city, required: true, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div>
       <%= form.label :contact_person, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.text_field :contact_person, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.text_field :contact_person, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div>
       <%= form.label :contact_info, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.text_field :contact_info, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.text_field :contact_info, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div>
       <%= form.label :priority, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.select :priority, Ticket.priorities.keys.map { |k| [k.humanize, k] }, {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.select :priority, Ticket.priorities.keys.map { |k| [k.humanize, k] }, {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div>
       <%= form.label :work_type, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.select :work_type, [["", nil]] + Ticket.work_types.keys.map { |k| [k.humanize, k] }, {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.select :work_type, [["", nil]] + Ticket.work_types.keys.map { |k| [k.humanize, k] }, {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div class="flex items-center space-x-2">
-      <%= form.check_box :lease, class: "h-4 w-4 rounded border-gray-700 bg-gray-800 text-indigo-600 focus:ring-indigo-500" %>
+      <%= form.check_box :lease, class: "h-4 w-4 rounded border-gray-700 bg-gray-800 text-indigo-600" %>
       <%= form.label :lease, class: "text-sm text-gray-300" %>
     </div>
+
     <div class="flex items-center space-x-2">
-      <%= form.check_box :under_warranty, class: "h-4 w-4 rounded border-gray-700 bg-gray-800 text-indigo-600 focus:ring-indigo-500" %>
+      <%= form.check_box :under_warranty, class: "h-4 w-4 rounded border-gray-700 bg-gray-800 text-indigo-600" %>
       <%= form.label :under_warranty, class: "text-sm text-gray-300" %>
     </div>
+
     <div class="md:col-span-2">
       <%= form.label :machine_model_or_type, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.text_field :machine_model_or_type, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.text_field :machine_model_or_type, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div class="md:col-span-2">
       <%= form.label :issue_description, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.text_area :issue_description, rows: 4, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.text_area :issue_description, rows: 4, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div>
       <%= form.label :requesting_tech_name, class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.text_field :requesting_tech_name, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.text_field :requesting_tech_name, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
+
     <div>
       <%= form.label :assigned_to, "Assigned User ID", class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.number_field :assigned_to, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+      <%= form.number_field :assigned_to, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
+    </div>
+
+    <div>
+      <%= form.label :stage, class: "mb-1 block text-sm font-medium text-gray-300" %>
+      <%= form.select :stage, Ticket.stages.keys.map { |k| [k.humanize, k] }, {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
   </div>
 
   <div class="flex items-center gap-3">
-    <%= form.submit class: "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900" %>
+    <%= form.submit class: "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500" %>
     <%= link_to "Back", tickets_path, class: "inline-flex items-center rounded-md border border-gray-700 px-4 py-2 text-sm font-semibold text-gray-100 hover:bg-gray-800" %>
   </div>
 <% end %>
