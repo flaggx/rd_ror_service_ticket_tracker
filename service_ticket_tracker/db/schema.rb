@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_05_013918) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_05_020157) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -55,6 +55,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_05_013918) do
     t.enum "stage", default: "not_scheduled", null: false, enum_type: "ticket_stage"
     t.datetime "completed_at"
     t.integer "position"
+    t.date "scheduled_date"
     t.index ["assigned_to"], name: "index_tickets_on_assigned_to"
     t.index ["completed_at"], name: "index_tickets_on_completed_at"
     t.index ["stage", "position"], name: "index_tickets_on_stage_and_position"

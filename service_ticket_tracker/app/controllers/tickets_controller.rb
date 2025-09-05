@@ -141,7 +141,8 @@ class TicketsController < ApplicationController
       :requesting_tech_name,
       :assigned_to,
       :stage,
-      :position
+      :position,
+      :scheduled_date
     )
   end
 end

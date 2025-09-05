@@ -4683,3 +4683,149 @@ Processing by TicketsController#board as HTML
 Completed 200 OK in 17ms (Views: 3.1ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
 
 
+Started GET "/tickets/2?modal=1" for 127.0.0.1 at 2025-09-04 22:01:27 -0400
+Processing by TicketsController#show as HTML
+  Parameters: {"modal" => "1", "id" => "2"}
+  [1m[36mTicket Load (0.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering tickets/show.html.erb
+  [1m[36mTicketUpdate Load (0.2ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 2 ORDER BY "ticket_updates"."created_at" ASC /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_updates_list.html.erb:4
+  Rendered tickets/_updates_list.html.erb (Duration: 1.2ms | GC: 0.0ms)
+  Rendered tickets/_update_form.html.erb (Duration: 0.8ms | GC: 0.0ms)
+  [1m[36mTicketImage Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 2 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/show.html.erb:46
+  Rendered tickets/show.html.erb (Duration: 3.1ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 3.1ms | ActiveRecord: 0.7ms (3 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/2/edit?modal=1" for 127.0.0.1 at 2025-09-04 22:01:29 -0400
+Processing by TicketsController#edit as HTML
+  Parameters: {"modal" => "1", "id" => "2"}
+  [1m[36mTicket Load (0.4ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='edit',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering tickets/edit.html.erb
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."username" ASC, "users"."id" ASC /*action='edit',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_form.html.erb:77
+  Rendered tickets/_form.html.erb (Duration: 13.5ms | GC: 0.0ms)
+  Rendered tickets/edit.html.erb (Duration: 14.1ms | GC: 0.0ms)
+Completed 200 OK in 26ms (Views: 14.4ms | ActiveRecord: 0.7ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets" for 127.0.0.1 at 2025-09-04 22:01:35 -0400
+Processing by TicketsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/index.html.erb within layouts/application
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY "tickets"."created_at" DESC /*action='index',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/index.html.erb:42
+  Rendered tickets/index.html.erb within layouts/application (Duration: 5.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.6ms | GC: 0.0ms)
+Completed 200 OK in 14ms (Views: 5.6ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tickets/board" for 127.0.0.1 at 2025-09-04 22:01:37 -0400
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.4ms | GC: 0.0ms)
+Completed 200 OK in 6ms (Views: 1.5ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(2857816646355546645) /*application='ServiceTicketTracker'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='ServiceTicketTracker'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='ServiceTicketTracker'*/[0m
+Migrating to AddScheduledDateToTickets (20250905020157)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN /*application='ServiceTicketTracker'*/[0m
+  [1m[35m (0.8ms)[0m  [1m[35mALTER TABLE "tickets" ADD "scheduled_date" date /*application='ServiceTicketTracker'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250905020157') RETURNING "version" /*application='ServiceTicketTracker'*/[0m
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT /*application='ServiceTicketTracker'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(2857816646355546645) /*application='ServiceTicketTracker'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='ServiceTicketTracker'*/[0m
+Started GET "/tickets/board" for 127.0.0.1 at 2025-09-04 22:09:49 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='ServiceTicketTracker'*/[0m
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 1.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.7ms | GC: 0.0ms)
+Completed 500 Internal Server Error in 51ms (ActiveRecord: 3.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionView::Template::Error (undefined local variable or method 'ticket' for an instance of #<Class:0x00007f6c066d6e00>)
+Caused by: NameError (undefined local variable or method 'ticket' for an instance of #<Class:0x00007f6c066d6e00>)
+
+Information for: ActionView::Template::Error (undefined local variable or method 'ticket' for an instance of #<Class:0x00007f6c066d6e00>):
+    1: <li
+    2:   id="ticket-<%= ticket.id %>"
+    3:   class="group cursor-grab rounded-md border border-gray-600 bg-gray-700 p-3 shadow-sm transition hover:ring-2 hover:ring-indigo-600/50"
+    4:   draggable="true"
+    5:   ondragstart="dragStart(event)"
+  
+app/views/tickets/board.html.erb:2
+
+Information for cause: NameError (undefined local variable or method 'ticket' for an instance of #<Class:0x00007f6c066d6e00>):
+  
+app/views/tickets/board.html.erb:2
+Started GET "/tickets/board" for 127.0.0.1 at 2025-09-04 22:11:58 -0400
+Processing by TicketsController#board as HTML
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" ORDER BY position IS NULL, position ASC, "tickets"."created_at" ASC /*action='board',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:28:in 'Enumerable#group_by'
+  Rendering layout layouts/application.html.erb
+  Rendering tickets/board.html.erb within layouts/application
+  Rendered tickets/board.html.erb within layouts/application (Duration: 1.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.3ms | GC: 0.0ms)
+Completed 200 OK in 41ms (Views: 5.5ms | ActiveRecord: 2.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/assets/application-20a041a8.css" for 127.0.0.1 at 2025-09-04 22:11:58 -0400
+Started GET "/tickets/2?modal=1" for 127.0.0.1 at 2025-09-04 22:11:59 -0400
+Processing by TicketsController#show as HTML
+  Parameters: {"modal" => "1", "id" => "2"}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering tickets/show.html.erb
+  [1m[36mTicketUpdate Load (0.3ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 2 ORDER BY "ticket_updates"."created_at" ASC /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_updates_list.html.erb:4
+  Rendered tickets/_updates_list.html.erb (Duration: 12.5ms | GC: 0.5ms)
+  Rendered tickets/_update_form.html.erb (Duration: 2.8ms | GC: 0.0ms)
+  [1m[36mTicketImage Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 2 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/show.html.erb:50
+  Rendered tickets/show.html.erb (Duration: 27.2ms | GC: 1.4ms)
+Completed 200 OK in 39ms (Views: 25.7ms | ActiveRecord: 2.3ms (3 queries, 0 cached) | GC: 4.5ms)
+
+
+Started GET "/tickets/2/edit?modal=1" for 127.0.0.1 at 2025-09-04 22:12:02 -0400
+Processing by TicketsController#edit as HTML
+  Parameters: {"modal" => "1", "id" => "2"}
+  [1m[36mTicket Load (0.2ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='edit',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering tickets/edit.html.erb
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."username" ASC, "users"."id" ASC /*action='edit',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_form.html.erb:77
+  Rendered tickets/_form.html.erb (Duration: 25.9ms | GC: 0.2ms)
+  Rendered tickets/edit.html.erb (Duration: 26.3ms | GC: 0.2ms)
+Completed 200 OK in 40ms (Views: 26.1ms | ActiveRecord: 1.7ms (2 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/tickets/2?modal=1" for 127.0.0.1 at 2025-09-04 22:12:39 -0400
+Processing by TicketsController#show as HTML
+  Parameters: {"modal" => "1", "id" => "2"}
+  [1m[36mTicket Load (0.3ms)[0m  [1m[34mSELECT "tickets".* FROM "tickets" WHERE "tickets"."id" = 2 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/controllers/tickets_controller.rb:113:in 'TicketsController#set_ticket'
+  Rendering tickets/show.html.erb
+  [1m[36mTicketUpdate Load (0.1ms)[0m  [1m[34mSELECT "ticket_updates".* FROM "ticket_updates" WHERE "ticket_updates"."ticket_id" = 2 ORDER BY "ticket_updates"."created_at" ASC /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/_updates_list.html.erb:4
+  Rendered tickets/_updates_list.html.erb (Duration: 3.1ms | GC: 0.0ms)
+  Rendered tickets/_update_form.html.erb (Duration: 1.8ms | GC: 0.0ms)
+  [1m[36mTicketImage Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "ticket_images" WHERE "ticket_images"."ticket_id" = 2 LIMIT 1 /*action='show',application='ServiceTicketTracker',controller='tickets'*/[0m
+  ↳ app/views/tickets/show.html.erb:50
+  Rendered tickets/show.html.erb (Duration: 7.7ms | GC: 0.0ms)
+Completed 200 OK in 25ms (Views: 7.7ms | ActiveRecord: 0.5ms (3 queries, 0 cached) | GC: 0.0ms)
+
+

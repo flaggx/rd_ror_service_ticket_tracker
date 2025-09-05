@@ -27,6 +27,10 @@
       <dd class="mt-1 text-sm text-gray-100"><%= @ticket.stage.humanize %></dd>
     </div>
     <div>
+      <dt class="text-sm font-medium text-gray-400">Scheduled date</dt>
+      <dd class="mt-1 text-sm text-gray-100"><%= @ticket.scheduled_date ? l(@ticket.scheduled_date, format: :long) : "—" %></dd>
+    </div>
+    <div>
       <dt class="text-sm font-medium text-gray-400">Under warranty</dt>
       <dd class="mt-1 text-sm text-gray-100"><%= @ticket.under_warranty ? "Yes" : "No" %></dd>
     </div>

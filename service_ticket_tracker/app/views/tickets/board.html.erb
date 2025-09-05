@@ -72,6 +72,20 @@
               <div class="mt-1 text-xs text-gray-300">
                 <span class="font-medium">City:</span> <%= ticket.city %>
               </div>
+              <div class="mt-1 text-xs text-gray-300">
+                <% sd = ticket.scheduled_date %>
+                <span class="font-medium">Scheduled:</span>
+                <% if sd.present? %>
+                  <% label = case sd
+                             when Date.current then "Today"
+                             when Date.current + 1 then "Tomorrow"
+                             else l(sd, format: :long)
+                             end %>
+                  <span class="inline-flex items-center rounded-full bg-indigo-900/40 px-2 py-0.5 text-xs text-indigo-200"><%= label %></span>
+                <% else %>
+                  —
+                <% end %>
+              </div>
               <div class="mt-1 text-xs">
                 <% color = { "high"=>"bg-red-900/50 text-red-300", "medium"=>"bg-yellow-900/50 text-yellow-300", "low"=>"bg-gray-600 text-gray-200" }[ticket.priority] || "bg-gray-600 text-gray-200" %>
                 <span class="mr-2 text-gray-300">Priority:</span>
