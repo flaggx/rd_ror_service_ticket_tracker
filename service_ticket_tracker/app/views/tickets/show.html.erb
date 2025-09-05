@@ -1,0 +1,58 @@
+<div class="mb-4 flex items-center justify-between">
+  <h1 class="text-xl font-semibold"><%= @ticket.account_name %></h1>
+  <div class="space-x-2">
+    <% if @ticket.stage == "repair_complete" %>
+      <span class="inline-flex items-center rounded-full bg-green-900/50 px-2 py-1 text-xs font-medium text-green-300">Completed</span>
+    <% end %>
+    <%= link_to "Edit", edit_ticket_path(@ticket), class: "inline-flex items-center rounded-md border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-100 hover:bg-gray-800" %>
+    <%= link_to "Back", tickets_path, class: "inline-flex items-center rounded-md bg-gray-700 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-600" %>
+  </div>
+</div>
+
+<div class="rounded-lg border border-gray-700 bg-gray-800 p-4">
+  <dl class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+    <div>
+      <dt class="text-sm font-medium text-gray-400">City</dt>
+      <dd class="mt-1 text-sm text-gray-100"><%= @ticket.city %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-400">Priority</dt>
+      <dd class="mt-1 text-sm text-gray-100"><%= @ticket.priority.humanize %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-400">Stage</dt>
+      <dd class="mt-1 text-sm text-gray-100"><%= @ticket.stage.humanize %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-400">Under warranty</dt>
+      <dd class="mt-1 text-sm text-gray-100"><%= @ticket.under_warranty ? "Yes" : "No" %></dd>
+    </div>
+    <div class="sm:col-span-2">
+      <dt class="text-sm font-medium text-gray-400">Issue description</dt>
+      <dd class="mt-1 text-sm text-gray-100"><%= simple_format(@ticket.issue_description) %></dd>
+    </div>
+  </dl>
+</div>
+
+<div class="mt-6">
+  <h2 class="mb-2 text-lg font-semibold">Updates</h2>
+  <%= render "updates_list", ticket: @ticket %>
+  <%= render "update_form", ticket: @ticket, ticket_update: TicketUpdate.new %>
+</div>
+
+<% if @ticket.images.any? %>
+  <div class="mt-6">
+    <h2 class="mb-2 text-lg font-semibold">Images</h2>
+    <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <% @ticket.images.each do |img| %>
+        <div class="rounded-md border border-gray-700 p-2 bg-gray-800">
+          <% if img.image.attached? %>
+            <%= image_tag img.image.variant(resize_to_limit: [600, 600]), class: "rounded" %>
+          <% else %>
+            <%= image_tag img.url, class: "rounded" if img.url.present? %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,132 @@
+<% stages = [
+  ["not_scheduled", "Not Scheduled"],
+  ["install_removal", "Install / Removal"],
+  ["scheduled_today", "Scheduled Today"],
+  ["scheduled_tomorrow", "Scheduled Tomorrow"],
+  ["parts_needed", "Parts Needed"],
+  ["parts_ready", "Parts Ready To Go"],
+  ["repair_complete", "Repair Complete"]
+] %>
+
+<div class="mb-4 flex items-center justify-between">
+  <h1 class="text-xl font-semibold">Ticket Board</h1>
+  <div class="space-x-2">
+    <%= link_to "Back to List", tickets_path, class: "inline-flex items-center rounded-md border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-100 hover:bg-gray-800" %>
+    <%= link_to "New Ticket", new_ticket_path, class: "inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+  </div>
+</div>
+
+<div id="board-error" class="mb-3 hidden rounded-md border border-red-800 bg-red-900/60 px-4 py-2 text-sm text-red-200"></div>
+
+<div class="overflow-x-auto">
+  <div class="flex gap-4 pb-2 min-w-max">
+    <% @tickets_by_stage ||= {} %>
+    <% stages.each do |value, label| %>
+      <section class="flex-none w-80 rounded-lg border border-gray-700 bg-gray-800">
+        <header class="border-b border-gray-700 px-3 py-2">
+          <h2 class="text-sm font-semibold text-gray-200"><%= label %></h2>
+        </header>
+        <ul
+          class="min-h-24 space-y-2 p-3 transition ring-0"
+          data-stage="<%= value %>"
+          ondragover="event.preventDefault()"
+          ondragenter="columnEnter(event)"
+          ondragleave="columnLeave(event)"
+          ondrop="dropOnColumn(event)"
+        >
+          <% (@tickets_by_stage[value] || []).each do |ticket| %>
+            <li
+              id="ticket-<%= ticket.id %>"
+              class="cursor-move rounded-md border border-gray-600 bg-gray-700 p-3 shadow-sm"
+              draggable="true"
+              ondragstart="dragStart(event)"
+              data-ticket-id="<%= ticket.id %>"
+            >
+              <div class="flex items-center justify-between">
+                <div class="text-sm font-medium text-gray-100"><%= ticket.account_name %></div>
+                <span class="text-xs text-gray-400">#<%= ticket.id %></span>
+              </div>
+              <div class="mt-1 text-xs text-gray-300">
+                <span class="font-medium">City:</span> <%= ticket.city %>
+              </div>
+              <div class="mt-1 text-xs">
+                <% color = { "high"=>"bg-red-900/50 text-red-300", "medium"=>"bg-yellow-900/50 text-yellow-300", "low"=>"bg-gray-600 text-gray-200" }[ticket.priority] || "bg-gray-600 text-gray-200" %>
+                <span class="inline-flex items-center rounded-full px-2 py-0.5 font-medium <%= color %>"><%= ticket.priority.humanize %></span>
+                <% if ticket.stage == "repair_complete" %>
+                  <span class="ml-2 inline-flex items-center rounded-full bg-green-900/50 px-2 py-0.5 text-xs font-medium text-green-300">Completed</span>
+                <% end %>
+              </div>
+              <div class="mt-2 flex items-center gap-2 text-xs">
+                <%= link_to "Open", ticket_path(ticket), class: "text-indigo-400 hover:text-indigo-300" %>
+                <%= link_to "Edit", edit_ticket_path(ticket), class: "text-gray-300 hover:text-gray-100" %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+  </div>
+</div>
+
+<script>
+    let draggedId = null;
+    let previousParent = null;
+
+    function showBoardError(msg) {
+        const box = document.getElementById("board-error");
+        if (!box) return;
+        box.textContent = msg;
+        box.classList.remove("hidden");
+        setTimeout(() => box.classList.add("hidden"), 4000);
+    }
+
+    function dragStart(e) {
+        draggedId = e.currentTarget.dataset.ticketId;
+        previousParent = e.currentTarget.parentElement;
+        e.dataTransfer.effectAllowed = "move";
+    }
+
+    function columnEnter(e) {
+        e.currentTarget.classList.add("ring", "ring-indigo-700/60");
+    }
+
+    function columnLeave(e) {
+        e.currentTarget.classList.remove("ring", "ring-indigo-700/60");
+    }
+
+    async function dropOnColumn(e) {
+        e.preventDefault();
+        const ul = e.currentTarget;
+        ul.classList.remove("ring", "ring-indigo-700/60");
+        const stage = ul.dataset.stage;
+        if (!draggedId) return;
+
+        // Optimistic move
+        const el = document.getElementById(`ticket-${draggedId}`);
+        if (el && ul) ul.appendChild(el);
+
+        try {
+            const resp = await fetch(`/tickets/${draggedId}/stage`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+        },
+            body: JSON.stringify({ stage })
+        });
+            if (!resp.ok) {
+                const data = await resp.json().catch(() => ({}));
+                if (previousParent && el) previousParent.appendChild(el);
+                showBoardError(data.error || "Failed to update stage");
+            }
+        } catch (err) {
+            console.error(err);
+            if (previousParent && el) previousParent.appendChild(el);
+            showBoardError("Network error updating stage");
+        } finally {
+            draggedId = null;
+            previousParent = null;
+        }
+    }
+</script>

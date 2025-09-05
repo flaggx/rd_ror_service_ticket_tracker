@@ -1,0 +1,83 @@
+# --- Ruby / Bundler ---
+/.bundle/
+/vendor/bundle
+/.byebug_history
+/.pry_history
+
+# JetBrains IDE (RubyMine/IntelliJ)
+/.idea/
+
+# --- Rails logs and temp ---
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+/tmp/pids/*
+!/tmp/pids/.keep
+/tmp/cache/*
+!/tmp/cache/.keep
+/tmp/sockets/*
+!/tmp/sockets/.keep
+/tmp/capybara/*
+!/tmp/capybara/.keep
+
+# --- Active Storage (keep placeholder only) ---
+/storage/*
+!/storage/.keep
+
+# --- Assets: Sprockets / cssbundling-rails build output ---
+/public/assets
+/public/*.map
+/public/.sprockets-manifest-*.json
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+# --- Node / Package managers ---
+/node_modules
+/yarn-error.log
+/npm-debug.log*
+/pnpm-debug.log*
+/package-lock.json
+# Keep yarn.lock in Git; remove package-lock.json if using Yarn exclusively.
+
+# --- Environment / credentials (commit encrypted creds, ignore keys) ---
+.env
+.env.*.local
+/.env.local
+/config/master.key
+/config/credentials/*.key
+
+# --- Databases (for SQLite projects; safe even if you use PostgreSQL) ---
+/db/*.sqlite3
+/db/*.sqlite3-*
+/db/*.sqlite3-journal
+
+# --- Coverage / test artifacts ---
+/coverage
+/spec/examples.txt
+
+# --- Editor/IDE ---
+/.idea/
+/.vscode/
+/.fleet/
+*.iml
+
+# --- OS / Misc ---
+.DS_Store
+Thumbs.db
+
+# --- Lint/Tooling caches ---
+/.rubocop-cache
+/.rubocop-http*
+/.solargraph
+/.yardoc
+/_yardoc
+
+# --- Docker (optional – ignore if generated at runtime) ---
+# /docker/*.env
+# /docker/build/*
+# !/docker/build/.keep
+
+# --- Kamal (optional – ignore local secret files if present) ---
+# /.kamal/secrets
+# /.kamal/*.key

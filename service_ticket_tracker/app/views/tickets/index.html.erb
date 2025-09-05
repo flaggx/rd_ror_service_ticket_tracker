@@ -1,0 +1,67 @@
+<div class="mb-4 flex items-center justify-between">
+  <h2 class="text-xl font-semibold">Tickets</h2>
+  <%= link_to "New Ticket", new_ticket_path, class: "inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+</div>
+
+<%= form_with url: tickets_path, method: :get, local: true, class: "mb-4 grid grid-cols-1 gap-3 md:grid-cols-6" do |f| %>
+  <div>
+    <label class="block text-xs font-medium text-gray-300 mb-1">Priority</label>
+    <%= f.select :priority, [["Any", ""], *Ticket.priorities.keys.map { |k| [k.humanize, k] }], {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-sm text-gray-100" %>
+  </div>
+  <div>
+    <label class="block text-xs font-medium text-gray-300 mb-1">Stage</label>
+    <%= f.select :stage, [["Any", ""], *Ticket.stages.keys.map { |k| [k.humanize, k] }], {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-sm text-gray-100" %>
+  </div>
+  <div>
+    <label class="block text-xs font-medium text-gray-300 mb-1">Warranty</label>
+    <%= f.select :under_warranty, [["Any", ""], ["Yes", "true"], ["No", "false"]], {}, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-sm text-gray-100" %>
+  </div>
+  <div>
+    <label class="block text-xs font-medium text-gray-300 mb-1">Assigned User ID</label>
+    <%= f.number_field :assigned_to, value: params[:assigned_to], class: "block w-full rounded-md border-gray-700 bg-gray-800 text-sm text-gray-100" %>
+  </div>
+  <div class="md:col-span-2 flex items-end gap-2">
+    <%= f.submit "Apply", class: "inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+    <%= link_to "Clear", tickets_path, class: "inline-flex items-center rounded-md border border-gray-700 px-3 py-2 text-sm font-semibold text-gray-100 hover:bg-gray-800" %>
+  </div>
+<% end %>
+
+<div class="overflow-hidden rounded-lg border border-gray-700 bg-gray-800">
+  <table class="min-w-full divide-y divide-gray-700">
+    <thead class="bg-gray-900">
+    <tr>
+      <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Account</th>
+      <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">City</th>
+      <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Priority</th>
+      <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Stage</th>
+      <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Completed</th>
+      <th class="px-4 py-3"></th>
+    </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-700 bg-gray-800">
+    <% @tickets.to_a.each do |ticket| %>
+      <tr>
+        <td class="px-4 py-3"><%= ticket.account_name %></td>
+        <td class="px-4 py-3"><%= ticket.city %></td>
+        <td class="px-4 py-3">
+          <% color = { "high" => "bg-red-900/50 text-red-300", "medium" => "bg-yellow-900/50 text-yellow-300", "low" => "bg-gray-700 text-gray-200" }[ticket.priority] || "bg-gray-700 text-gray-200" %>
+          <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium <%= color %>"><%= ticket.priority.humanize %></span>
+        </td>
+        <td class="px-4 py-3"><%= ticket.stage.humanize %></td>
+        <td class="px-4 py-3">
+          <% if ticket.stage == "repair_complete" %>
+            <span class="inline-flex items-center rounded-full bg-green-900/50 px-2 py-1 text-xs font-medium text-green-300">Completed</span>
+          <% else %>
+            <span class="text-xs text-gray-500">—</span>
+          <% end %>
+        </td>
+        <td class="px-4 py-3 text-right space-x-2">
+          <%= link_to "Show", ticket, class: "text-indigo-400 hover:text-indigo-300 text-sm" %>
+          <%= link_to "Edit", edit_ticket_path(ticket), class: "text-indigo-400 hover:text-indigo-300 text-sm" %>
+          <%= link_to "Delete", ticket, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:text-red-300 text-sm" %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

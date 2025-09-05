@@ -1,0 +1,54 @@
+<div class="mb-4 flex items-center justify-between">
+  <h1 class="text-xl font-semibold"><%= @ticket.account_name %></h1>
+  <div class="space-x-2">
+    <% if @ticket.stage == "repair_complete" %>
+      <span class="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">Completed</span>
+    <% end %>
+    <%= link_to "Edit", edit_ticket_path(@ticket), class: "inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50" %>
+    <%= link_to "Back", tickets_path, class: "inline-flex items-center rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-700" %>
+  </div>
+</div>
+
+
+<div id="<%= dom_id ticket %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Account name:</strong>
+    <%= ticket.account_name %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">City:</strong>
+    <%= ticket.city %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Contact person:</strong>
+    <%= ticket.contact_person %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Contact info:</strong>
+    <%= ticket.contact_info %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Lease:</strong>
+    <%= ticket.lease? ? "Yes" : "No" %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Under warranty:</strong>
+    <%= ticket.under_warranty? ? "Yes" : "No" %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Machine model or type:</strong>
+    <%= ticket.machine_model_or_type %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Issue description:</strong>
+    <%= ticket.issue_description %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Requesting tech name:</strong>
+    <%= ticket.requesting_tech_name %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Assigned to:</strong>
+    <%= ticket.assigned_to %>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+  <title><%= content_for?(:title) ? yield(:title) : "Service Ticket Tracker" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+</head>
+<body class="bg-gray-900 text-gray-100">
+<header class="bg-gray-800 border-b border-gray-700">
+  <div class="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
+    <h1 class="text-xl font-semibold">Service Ticket Tracker</h1>
+    <nav class="space-x-4">
+      <%= nav_link_to "Board", board_tickets_path %>
+      <%= nav_link_to "Tickets", tickets_path %>
+      <%= nav_link_to "Users", users_path %>
+    </nav>
+  </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-4 py-6">
+  <% if notice.present? %>
+    <div class="mb-4 rounded-md border border-green-800 bg-green-900/60 px-4 py-3 text-green-200">
+      <%= notice %>
+    </div>
+  <% end %>
+  <% if alert.present? %>
+    <div class="mb-4 rounded-md border border-red-800 bg-red-900/60 px-4 py-3 text-red-200">
+      <%= alert %>
+    </div>
+  <% end %>
+
+  <%= yield %>
+</main>
+</body>
+</html>
