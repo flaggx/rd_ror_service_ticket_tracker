@@ -126,7 +126,10 @@
         const modal = document.getElementById("ticket-modal");
         modal.classList.remove("hidden");
         modal.classList.add("flex");
+        // Re-init any date pickers that were just injected
+        if (window.initScheduledPicker) window.initScheduledPicker();
     }
+
     function closeModal() {
         const modal = document.getElementById("ticket-modal");
         modal.classList.add("hidden");

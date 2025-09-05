@@ -5,8 +5,35 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+  <!-- Flatpickr (calendar) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <script>
+      // Global initializer: call this any time new content is added (incl. modal)
+      window.initScheduledPicker = function initScheduledPicker() {
+          if (!window.flatpickr) return;
+          document.querySelectorAll(".js-scheduled-date").forEach(function(el) {
+              if (el.dataset.fpApplied) return; // avoid double-init
+              window.flatpickr(el, {
+                  dateFormat: "Y-m-d",      // Rails-friendly (YYYY-MM-DD)
+                  altInput: true,
+                  altFormat: "M j, Y",      // Pretty display format
+                  allowInput: true
+              });
+              el.dataset.fpApplied = "1";
+          });
+      };
+
+      // Initialize on initial load and on Turbo navs
+      document.addEventListener("DOMContentLoaded", window.initScheduledPicker);
+      document.addEventListener("turbo:load", window.initScheduledPicker);
+      document.addEventListener("turbo:render", window.initScheduledPicker);
+  </script>
 </head>
 <body class="bg-gray-900 text-gray-100">
 <header class="bg-gray-800 border-b border-gray-700">

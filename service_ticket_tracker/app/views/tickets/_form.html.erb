@@ -86,7 +86,11 @@
 
     <div>
       <%= form.label :scheduled_date, "Scheduled date", class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.date_field :scheduled_date, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
+      <%= form.text_field :scheduled_date,
+                          value: (ticket.scheduled_date&.to_s),
+                          class: "js-scheduled-date block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100",
+                          autocomplete: "off",
+                          placeholder: "Pick a date" %>
     </div>
   </div>
 
