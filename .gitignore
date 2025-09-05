@@ -52,6 +52,7 @@ Thumbs.db
 
 # Ignore tmp and cache in the nested Rails app (keep placeholders)
 service_ticket_tracker/tmp/*
+service_ticket_tracker/tmp/cache/bootsnap/*
 !service_ticket_tracker/tmp/.keep
 service_ticket_tracker/tmp/cache/*
 !service_ticket_tracker/tmp/cache/.keep

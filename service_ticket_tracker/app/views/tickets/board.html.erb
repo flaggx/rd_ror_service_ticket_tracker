@@ -18,18 +18,33 @@
 
 <div id="board-error" class="mb-3 hidden rounded-md border border-red-800 bg-red-900/60 px-4 py-2 text-sm text-red-200"></div>
 
-<div class="overflow-x-auto select-none">
-  <div class="flex gap-4 pb-2 min-w-max">
+<!-- Modal Overlay -->
+<div id="ticket-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+  <div class="absolute inset-0 bg-black/70" onclick="closeModal()"></div>
+  <div class="relative z-10 w-[95vw] max-w-4xl max-h-[90vh] overflow-auto rounded-lg border border-gray-700 bg-gray-900 p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold text-gray-100">Ticket</h3>
+      <button class="rounded bg-gray-800 px-3 py-1 text-sm text-gray-200 hover:bg-gray-700" onclick="closeModal()">Close</button>
+    </div>
+    <div id="ticket-modal-body" class="prose prose-invert max-w-none">
+      <!-- ticket details will be loaded here -->
+    </div>
+  </div>
+</div>
+
+<!-- Board with comfortable height and sticky headers -->
+<div id="board-scroll" class="overflow-x-auto select-none pb-10">
+  <div class="flex gap-4 min-w-max">
     <% @tickets_by_stage ||= {} %>
     <% stages.each do |value, label| %>
       <section class="flex-none w-80 rounded-lg border border-gray-700 bg-gray-800">
-        <header class="border-b border-gray-700 px-3 py-2">
+        <header class="sticky top-0 z-10 border-b border-gray-700 bg-gray-800/95 px-3 py-2 backdrop-blur">
           <h2 class="text-sm font-semibold text-gray-200"><%= label %></h2>
         </header>
         <ul
-          class="min-h-32 space-y-2 p-3 transition ring-0"
+          class="max-h-[78vh] min-h-[65vh] overflow-y-auto space-y-2 p-3 transition ring-0"
           data-stage="<%= value %>"
-          ondragover="event.preventDefault()"
+          ondragover="columnDragOver(event)"
           ondragenter="columnEnter(event)"
           ondragleave="columnLeave(event)"
           ondrop="dropOnColumn(event)"
@@ -37,11 +52,18 @@
           <% (@tickets_by_stage[value] || []).each do |ticket| %>
             <li
               id="ticket-<%= ticket.id %>"
-              class="group cursor-grab rounded-md border border-gray-600 bg-gray-700 p-3 shadow-sm transition"
+              class="group cursor-grab rounded-md border border-gray-600 bg-gray-700 p-3 shadow-sm transition hover:ring-2 hover:ring-indigo-600/50"
               draggable="true"
               ondragstart="dragStart(event)"
               ondragend="dragEnd(event)"
+              ondragover="cardDragOver(event)"
+              ondragleave="cardDragLeave(event)"
+              onclick="cardClick(event)"
+              onkeydown="cardKeydown(event)"
+              role="button"
+              tabindex="0"
               data-ticket-id="<%= ticket.id %>"
+              data-url="<%= ticket_path(ticket, modal: 1) %>"
             >
               <div class="flex items-center justify-between">
                 <div class="text-sm font-medium text-gray-100"><%= ticket.account_name %></div>
@@ -58,14 +80,12 @@
                   <span class="ml-2 inline-flex items-center rounded-full bg-green-900/50 px-2 py-0.5 text-xs font-medium text-green-300">Completed</span>
                 <% end %>
               </div>
-              <div class="mt-2 flex items-center gap-2 text-xs">
-                <%= link_to "Open", ticket_path(ticket), class: "text-indigo-400 hover:text-indigo-300" %>
-                <%= link_to "Edit", edit_ticket_path(ticket), class: "text-gray-300 hover:text-gray-100" %>
+              <div class="mt-2 text-xs text-gray-400">
+                Click card to open • Drag to re-order/move
               </div>
             </li>
           <% end %>
 
-          <!-- Drop hint: now shown whenever dragging over the column, even if it has cards -->
           <li class="hidden drop-hint rounded border border-dashed border-indigo-700/60 bg-indigo-900/20 p-2 text-center text-xs text-indigo-300">
             Drop here
           </li>
@@ -78,6 +98,38 @@
 <script>
     let draggedId = null;
     let previousParent = null;
+    let dragStartedAt = 0;
+    let dropBeforeId = null;
+    let autoScrollTimer = null;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let lastUL = null;
+
+    // Modal helpers
+    function openModal(html) {
+        const body = document.getElementById("ticket-modal-body");
+        body.innerHTML = html;
+        const modal = document.getElementById("ticket-modal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
+    function closeModal() {
+        const modal = document.getElementById("ticket-modal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        document.getElementById("ticket-modal-body").innerHTML = "";
+    }
+
+    // Persist horizontal scroll
+    (function restoreBoardScroll() {
+        const scroller = document.getElementById("board-scroll");
+        if (!scroller) return;
+        const saved = localStorage.getItem("board.scrollLeft");
+        if (saved) scroller.scrollLeft = parseInt(saved, 10);
+        scroller.addEventListener("scroll", () => {
+            localStorage.setItem("board.scrollLeft", String(scroller.scrollLeft));
+        });
+    })();
 
     function showBoardError(msg) {
         const box = document.getElementById("board-error");
@@ -103,7 +155,7 @@
         const hint = ul.querySelector(".drop-hint");
         if (on) {
             ul.classList.add("ring", "ring-indigo-700/60", "bg-indigo-900/10");
-            if (hint) hint.classList.remove("hidden"); // always show hint while dragging over
+            if (hint) hint.classList.remove("hidden");
         } else {
             ul.classList.remove("ring", "ring-indigo-700/60", "bg-indigo-900/10");
             if (hint) hint.classList.add("hidden");
@@ -116,14 +168,31 @@
         previousParent = el.parentElement;
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/plain", draggedId);
+        dragStartedAt = Date.now();
         setDraggingStyles(el, true);
     }
 
     function dragEnd(e) {
         setDraggingStyles(e.currentTarget, false);
         document.querySelectorAll("ul[data-stage]").forEach(ul => toggleDropStyles(ul, false));
+        document.querySelectorAll("li[id^='ticket-']").forEach(card => card.classList.remove("ring", "ring-indigo-500"));
+        stopAutoScroll();
         draggedId = null;
         previousParent = null;
+        dragStartedAt = 0;
+        dropBeforeId = null;
+        lastUL = null;
+    }
+
+    // Update pointer coordinates constantly and (re)start auto-scroll loop
+    function columnDragOver(e) {
+        e.preventDefault();
+        const ul = e.currentTarget;
+        lastPointerX = e.clientX;
+        lastPointerY = e.clientY;
+        lastUL = ul;
+        toggleDropStyles(ul, true);
+        startAutoScroll();
     }
 
     function columnEnter(e) {
@@ -136,17 +205,72 @@
         }
     }
 
+    function cardDragOver(e) {
+        e.preventDefault();
+        const card = e.currentTarget;
+        dropBeforeId = card.dataset.ticketId;
+        card.classList.add("ring", "ring-indigo-500");
+    }
+
+    function cardDragLeave(e) {
+        const card = e.currentTarget;
+        card.classList.remove("ring", "ring-indigo-500");
+        if (!card.contains(e.relatedTarget) && dropBeforeId === card.dataset.ticketId) {
+            dropBeforeId = null;
+        }
+    }
+
+    function cardClick(e) {
+        if (draggedId) return;
+        if (dragStartedAt && (Date.now() - dragStartedAt) < 150) return;
+
+        const url = e.currentTarget?.dataset?.url;
+        if (!url) return;
+
+        fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "text/html" }})
+            .then(r => r.text())
+            .then(html => openModal(html))
+            .catch(() => showBoardError("Failed to load ticket"));
+    }
+
+    function cardKeydown(e) {
+        if ((e.key === "Enter" || e.key === " ") && !draggedId) {
+            e.preventDefault();
+            cardClick({ currentTarget: e.currentTarget });
+        }
+    }
+
+    function computePositionIndex(ul) {
+        const ids = Array.from(ul.querySelectorAll("li[id^='ticket-']")).map(li => li.dataset.ticketId);
+        return ids.indexOf(draggedId) + 1;
+    }
+
     async function dropOnColumn(e) {
         e.preventDefault();
         const ul = e.currentTarget;
         toggleDropStyles(ul, false);
+        stopAutoScroll();
+
         const stage = ul.dataset.stage;
         if (!draggedId) return;
 
         const el = document.getElementById(`ticket-${draggedId}`);
-        if (el && ul) ul.appendChild(el);
+
+        if (dropBeforeId) {
+            const beforeEl = document.getElementById(`ticket-${dropBeforeId}`);
+            if (beforeEl && beforeEl.parentElement === ul) {
+                ul.insertBefore(el, beforeEl);
+            } else {
+                ul.appendChild(el);
+            }
+        } else {
+            ul.appendChild(el);
+        }
+
+        document.querySelectorAll("li[id^='ticket-']").forEach(card => card.classList.remove("ring", "ring-indigo-500"));
 
         try {
+            const position = computePositionIndex(ul);
             const resp = await fetch(`/tickets/${draggedId}/stage`, {
                 method: "PATCH",
                 headers: {
@@ -154,12 +278,12 @@
                     "Accept": "application/json",
                     "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
                 },
-                body: JSON.stringify({ stage })
+                body: JSON.stringify({ stage, position })
             });
             if (!resp.ok) {
                 const data = await resp.json().catch(() => ({}));
                 if (previousParent && el) previousParent.appendChild(el);
-                showBoardError(data.error || "Failed to update stage");
+                showBoardError(data.error || "Failed to update stage/position");
             }
         } catch (err) {
             console.error(err);
@@ -169,6 +293,67 @@
             setDraggingStyles(el, false);
             draggedId = null;
             previousParent = null;
+            dragStartedAt = 0;
+            dropBeforeId = null;
+            lastUL = null;
+        }
+    }
+
+    // ---------- Auto-scroll improvements (top & edges) ----------
+    function startAutoScroll() {
+        if (autoScrollTimer) return; // already running
+        autoScrollTimer = setInterval(() => {
+            if (!lastUL) return;
+
+            const board = document.getElementById("board-scroll");
+            const viewportH = window.innerHeight;
+            const viewportW = window.innerWidth;
+
+            // Recompute edges continuously using latest pointer
+            const edgeV = 120; // vertical edge threshold (more generous for top)
+            const edgeH = 80;  // horizontal edge threshold
+            const fastBandV = 40; // extra speed very close to edges
+            const vBase = 12;
+            const hBase = 16;
+
+            const ulRect = lastUL.getBoundingClientRect();
+
+            // Window vertical scrolling
+            let scrollDown = lastPointerY > (viewportH - edgeV);
+            let scrollUp   = lastPointerY < edgeV;
+
+            // Column internal scrolling (vertical)
+            let colDown = lastPointerY > (ulRect.bottom - 80);
+            let colUp   = lastPointerY < (ulRect.top + 100); // larger top band
+
+            // Board horizontal scrolling
+            let scrollRight = lastPointerX > (viewportW - edgeH);
+            let scrollLeft  = lastPointerX < edgeH;
+
+            // Speed boost very close to the top/bottom
+            let vSpeed = vBase;
+            if (lastPointerY < fastBandV || lastPointerY > (viewportH - fastBandV)) vSpeed = vBase * 1.8;
+
+            // Apply scrolling
+            if (scrollDown) window.scrollBy(0, vSpeed);
+            if (scrollUp)   window.scrollBy(0, -vSpeed);
+
+            if (lastUL) {
+                if (colDown) lastUL.scrollTop += vSpeed;
+                if (colUp)   lastUL.scrollTop -= vSpeed;
+            }
+
+            if (board) {
+                if (scrollRight) board.scrollLeft += hBase;
+                if (scrollLeft)  board.scrollLeft -= hBase;
+            }
+        }, 16);
+    }
+
+    function stopAutoScroll() {
+        if (autoScrollTimer) {
+            clearInterval(autoScrollTimer);
+            autoScrollTimer = null;
         }
     }
 </script>

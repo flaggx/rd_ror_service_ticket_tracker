@@ -66,9 +66,17 @@
       <%= form.text_field :requesting_tech_name, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
     </div>
 
+    <!-- Assigned user select -->
     <div>
-      <%= form.label :assigned_to, "Assigned User ID", class: "mb-1 block text-sm font-medium text-gray-300" %>
-      <%= form.number_field :assigned_to, class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
+      <%= form.label :assigned_to, "Assigned user", class: "mb-1 block text-sm font-medium text-gray-300" %>
+      <%= form.select :assigned_to,
+                      options_from_collection_for_select(@users || User.order(:username, :id), :id, :username, ticket.assigned_to),
+                      { include_blank: "Unassigned" },
+                      class: "block w-full rounded-md border-gray-700 bg-gray-800 text-gray-100" %>
+      <p class="mt-1 text-xs text-gray-400">
+        Can’t find a user?
+        <%= link_to "Add a new user", new_user_path, class: "underline text-indigo-300 hover:text-indigo-200" %>
+      </p>
     </div>
 
     <div>
